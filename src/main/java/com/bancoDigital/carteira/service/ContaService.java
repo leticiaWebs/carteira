@@ -4,6 +4,7 @@ import com.bancoDigital.carteira.domain.Conta;
 import com.bancoDigital.carteira.dto.ClienteDto;
 import com.bancoDigital.carteira.dto.ContaDto;
 import com.bancoDigital.carteira.repository.ContaRepository;
+import com.bancoDigital.carteira.service.exceptions.DatabaseException;
 import com.bancoDigital.carteira.service.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
