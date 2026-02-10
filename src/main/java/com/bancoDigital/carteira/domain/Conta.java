@@ -21,9 +21,12 @@ public class Conta {
     private int id;
     private String numeroConta;
     private String numeroAgencia;
-    private String titular;
     private String saldo;
     private LocalDateTime dataCriacao;
+
+    @OneToOne
+    @JoinColumn(name = "tbCliente")
+    private Cliente cliente;
 
     @PrePersist
     public void prePersist() {

@@ -12,8 +12,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ClienteDto implements Serializable {
+
     private String documento;
     private String nome;
 
@@ -22,4 +22,8 @@ public class ClienteDto implements Serializable {
         this.nome = entity.getNome();
     }
 
+    public ClienteDto(String documento, String nome) {
+        this.documento = documento;
+        this.nome = nome;
+    }
 }
