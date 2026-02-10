@@ -2,10 +2,10 @@ package com.bancoDigital.carteira.service;
 
 import com.bancoDigital.carteira.domain.Cliente;
 import com.bancoDigital.carteira.domain.Conta;
-import com.bancoDigital.carteira.dto.ClienteDto;
 import com.bancoDigital.carteira.dto.ContaDto;
 import com.bancoDigital.carteira.repository.ClienteRepository;
 import com.bancoDigital.carteira.repository.ContaRepository;
+import com.bancoDigital.carteira.service.exceptions.DadosInvalidosException;
 import com.bancoDigital.carteira.service.exceptions.DatabaseException;
 import com.bancoDigital.carteira.service.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,21 +30,28 @@ public class ContaService {
 
     @Transactional
     public ContaDto create(ContaDto dto) {
-        Conta entity = new Conta();
-        entity.setId(dto.getId());
-        entity.setSaldo(dto.getSaldo());
-        entity.setNumeroAgencia(dto.getNumeroAgencia());
-        entity.setNumeroConta(dto.getNumeroConta());
-        entity.setDataCriacao(dto.getDataCriacao());
+        try {
+            Conta entity = new Conta();
+            entity.setId(dto.getId());
+            entity.setSaldo(dto.getSaldo());
+            entity.setNumeroAgencia(dto.getNumeroAgencia());
+            entity.setNumeroConta(dto.getNumeroConta());
+            entity.setDataCriacao(dto.getDataCriacao());
 
-        Cliente cliente = new Cliente();
-        cliente.setNome(dto.getCliente().getNome());
-        cliente.setDocumento(dto.getCliente().getDocumento());
+            Cliente cliente = new Cliente();
 
-        clienteRepository.save(cliente);
-        entity.setCliente(cliente);
-        contaRepository.save(entity);
-        return new ContaDto(entity);
+            cliente.setNome(dto.getCliente().getNome());
+            cliente.setDocumento(dto.getCliente().getDocumento());
+
+            clienteRepository.save(cliente);
+            entity.setCliente(cliente);
+            contaRepository.save(entity);
+            validarConta(dto);
+            return new ContaDto(entity);
+
+        } catch (IllegalArgumentException e) {
+            throw new DadosInvalidosException(e.getMessage());
+        }
 
     }
 
@@ -83,18 +90,28 @@ public class ContaService {
         }
     }
 
-    private void validarDocumento(String documento){
-        if(documento == null || documento.matches("\\d{11}")){
+    private void validarDocumento(String documento) {
+        if (documento == null || documento.matches("\\d{11}")) {
             throw new IllegalArgumentException("CPF inválido.");
         }
     }
 
-    private void validaNomeTitular(String nome){
-        if(nome == null || nome.isBlank()){
+    private void validaNomeTitular(String nome) {
+        if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome está vazio ou é invalido");
         }
     }
 
+    private void validarSaldo(String saldo) {
+        if (saldo == null || saldo.equals("0")) {
+            throw new IllegalArgumentException("O saldo inicial deve ser zero.");
+        }
+    }
 
+    private void validarConta(ContaDto dto) {
+        validaNomeTitular(dto.getCliente().getNome());
+        validarDocumento(dto.getCliente().getDocumento());
+        validarSaldo(dto.getSaldo());
+    }
 
 }
