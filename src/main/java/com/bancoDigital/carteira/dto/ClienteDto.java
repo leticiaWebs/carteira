@@ -2,6 +2,8 @@ package com.bancoDigital.carteira.dto;
 
 import com.bancoDigital.carteira.domain.Cliente;
 import com.bancoDigital.carteira.domain.Conta;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ClienteDto implements Serializable {
 
+    @NotBlank(message = "Nome é obrigatório")
     private String documento;
+
+    @NotBlank(message = "Documento é obrigatório")
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 números")
     private String nome;
 
     public ClienteDto(Cliente entity) {

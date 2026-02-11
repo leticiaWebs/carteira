@@ -46,7 +46,6 @@ public class ContaService {
             clienteRepository.save(cliente);
             entity.setCliente(cliente);
             contaRepository.save(entity);
-            validarConta(dto);
             return new ContaDto(entity);
 
         } catch (IllegalArgumentException e) {
@@ -88,30 +87,6 @@ public class ContaService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Integrity violation");
         }
-    }
-
-    private void validarDocumento(String documento) {
-        if (documento == null || documento.matches("\\d{11}")) {
-            throw new IllegalArgumentException("CPF inválido.");
-        }
-    }
-
-    private void validaNomeTitular(String nome) {
-        if (nome == null || nome.isBlank()) {
-            throw new IllegalArgumentException("Nome está vazio ou é invalido");
-        }
-    }
-
-    private void validarSaldo(String saldo) {
-        if (saldo == null || saldo.equals("0")) {
-            throw new IllegalArgumentException("O saldo inicial deve ser zero.");
-        }
-    }
-
-    private void validarConta(ContaDto dto) {
-        validaNomeTitular(dto.getCliente().getNome());
-        validarDocumento(dto.getCliente().getDocumento());
-        validarSaldo(dto.getSaldo());
     }
 
 }
