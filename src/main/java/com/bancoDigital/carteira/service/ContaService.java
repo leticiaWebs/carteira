@@ -29,19 +29,19 @@ public class ContaService {
     private ClienteRepository clienteRepository;
 
     @Transactional
-    public ContaRequest create(ContaRequest dto) {
+    public ContaRequest create(ContaRequest request) {
         try {
             Conta entity = new Conta();
-            entity.setId(dto.getId());
-            entity.setSaldo(dto.getSaldo());
-            entity.setNumeroAgencia(dto.getNumeroAgencia());
-            entity.setNumeroConta(dto.getNumeroConta());
-            entity.setDataCriacao(dto.getDataCriacao());
+            entity.setId(request.getId());
+            entity.setSaldo(request.getSaldo());
+            entity.setNumeroAgencia(request.getNumeroAgencia());
+            entity.setNumeroConta(request.getNumeroConta());
+            entity.setDataCriacao(request.getDataCriacao());
 
             Cliente cliente = new Cliente();
 
-            cliente.setNome(dto.getCliente().getNome());
-            cliente.setDocumento(dto.getCliente().getDocumento());
+            cliente.setNome(request.getCliente().getNome());
+            cliente.setDocumento(request.getCliente().getDocumento());
 
             clienteRepository.save(cliente);
             entity.setCliente(cliente);
@@ -68,10 +68,11 @@ public class ContaService {
     }
 
     @Transactional
-    public ContaRequest update(String id, ContaRequest dto) {
+    public ContaRequest update(String id, ContaRequest request) {
         try {
             Conta entity = contaRepository.getReferenceById(id);
-            entity.setSaldo(dto.getSaldo());
+            entity.setSaldo(request.getSaldo());
+//            entity.getCliente(request.getCliente().setNome());
             entity = contaRepository.save(entity);
             return new ContaRequest(entity);
         } catch (EntityNotFoundException e) {
