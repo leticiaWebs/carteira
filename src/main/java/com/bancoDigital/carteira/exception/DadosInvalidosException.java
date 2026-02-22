@@ -1,4 +1,4 @@
-package com.bancoDigital.carteira.service.exceptions;
+package com.bancoDigital.carteira.exception;
 
 public class DadosInvalidosException extends RuntimeException{
     public DadosInvalidosException(String msg){

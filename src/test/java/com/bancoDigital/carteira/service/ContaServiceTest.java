@@ -2,11 +2,11 @@ package com.bancoDigital.carteira.service;
 
 import com.bancoDigital.carteira.domain.Cliente;
 import com.bancoDigital.carteira.domain.Conta;
-import com.bancoDigital.carteira.dto.ContaDto;
+import com.bancoDigital.carteira.request.ContaRequest;
 import com.bancoDigital.carteira.repository.ClienteRepository;
 import com.bancoDigital.carteira.repository.ContaRepository;
-import com.bancoDigital.carteira.service.exceptions.DatabaseException;
-import com.bancoDigital.carteira.service.exceptions.ResourceNotFoundException;
+import com.bancoDigital.carteira.exception.DatabaseException;
+import com.bancoDigital.carteira.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ public class ContaServiceTest {
 
     private Conta conta;
     private Cliente cliente;
-    private ContaDto dto;
+    private ContaRequest dto;
 
     @BeforeEach
     void setup() {
@@ -55,7 +55,7 @@ public class ContaServiceTest {
         conta.setDataCriacao(LocalDateTime.now());
         conta.setCliente(cliente);
 
-        dto = new ContaDto(conta);
+        dto = new ContaRequest(conta);
     }
 
 
@@ -64,7 +64,7 @@ public class ContaServiceTest {
         when(clienteRepository.save(any())).thenReturn(cliente);
         when(contaRepository.save(any())).thenReturn(conta);
 
-        ContaDto result = service.create(dto);
+        ContaRequest result = service.create(dto);
 
         assertNotNull(result);
         verify(clienteRepository, times(1)).save(any());
@@ -76,7 +76,7 @@ public class ContaServiceTest {
     void findAllShouldReturnList() {
         when(contaRepository.findAll()).thenReturn(List.of(conta));
 
-        List<ContaDto> result = service.findAll();
+        List<ContaRequest> result = service.findAll();
 
         assertEquals(1, result.size());
         verify(contaRepository, times(1)).findAll();
@@ -87,7 +87,7 @@ public class ContaServiceTest {
     void findByIdShouldReturnContaDtoWhenExists() {
         when(contaRepository.findById("1")).thenReturn(Optional.of(conta));
 
-        ContaDto result = service.findById("1");
+        ContaRequest result = service.findById("1");
 
         assertNotNull(result);
         verify(contaRepository).findById("1");
@@ -106,7 +106,7 @@ public class ContaServiceTest {
         when(contaRepository.getReferenceById("1")).thenReturn(conta);
         when(contaRepository.save(any())).thenReturn(conta);
 
-        ContaDto result = service.update("1", dto);
+        ContaRequest result = service.update("1", dto);
 
         assertNotNull(result);
         verify(contaRepository).getReferenceById("1");

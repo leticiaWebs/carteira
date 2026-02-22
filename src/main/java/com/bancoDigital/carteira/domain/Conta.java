@@ -1,6 +1,7 @@
 package com.bancoDigital.carteira.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,12 @@ public class Conta {
     private int id;
     private String numeroConta;
     private String numeroAgencia;
-    private String saldo;
+    private double saldo;
     private LocalDateTime dataCriacao;
 
     @OneToOne
     @JoinColumn(name = "tbCliente")
+    @Valid
     private Cliente cliente;
 
     @PrePersist

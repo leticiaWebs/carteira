@@ -1,9 +1,8 @@
-package com.bancoDigital.carteira.dto;
+package com.bancoDigital.carteira.request;
 
 import com.bancoDigital.carteira.domain.Cliente;
 import com.bancoDigital.carteira.domain.Conta;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,20 +14,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ContaDto implements Serializable {
+public class ContaRequest implements Serializable {
 
     private int id;
 
     private String numeroConta;
     private String numeroAgencia;
     @Pattern(regexp = "^0$", message = "O saldo inicial deve ser zero")
-    private String saldo;
+    private double saldo;
     private LocalDateTime dataCriacao;
     @Valid
     private Cliente cliente;
 
 
-    public ContaDto(int id, String numeroConta, String numeroAgencia, String saldo, LocalDateTime dataCriacao, Cliente cliente) {
+    public ContaRequest(int id, String numeroConta, String numeroAgencia, Double saldo, LocalDateTime dataCriacao, Cliente cliente) {
         this.id = id;
         this.numeroConta = numeroConta;
         this.numeroAgencia = numeroAgencia;
@@ -37,7 +36,8 @@ public class ContaDto implements Serializable {
         this.cliente = cliente;
     }
 
-    public ContaDto(Conta entity) {
+    @Valid
+    public ContaRequest(Conta entity) {
         this.id = entity.getId();
         this.numeroConta = entity.getNumeroConta();
         this.numeroAgencia = entity.getNumeroAgencia();

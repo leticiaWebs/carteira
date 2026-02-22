@@ -1,4 +1,4 @@
-package com.bancoDigital.carteira.service.exceptions;
+package com.bancoDigital.carteira.exception;
 
 public class ResourceNotFoundException extends RuntimeException{
 

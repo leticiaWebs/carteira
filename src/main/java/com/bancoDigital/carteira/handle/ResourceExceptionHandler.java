@@ -1,6 +1,8 @@
-package com.bancoDigital.carteira.service.exceptions;
+package com.bancoDigital.carteira.handle;
 
 
+import com.bancoDigital.carteira.exception.DadosInvalidosException;
+import com.bancoDigital.carteira.config.StandardError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.bancoDigital.carteira.controller;
 
-import com.bancoDigital.carteira.dto.ContaDto;
+import com.bancoDigital.carteira.request.ContaRequest;
 import com.bancoDigital.carteira.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,33 +18,40 @@ public class ContaController {
     private ContaService service;
 
     @PostMapping
-    public ResponseEntity<ContaDto> create(@RequestBody ContaDto dto) {
-        dto = service.create(dto);
+    public ResponseEntity<ContaRequest> create(@RequestBody ContaRequest request) {
+        request = service.create(request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(dto.getId()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+                .buildAndExpand(request.getId()).toUri();
+        return ResponseEntity.created(uri).body(request);
     }
 
     @GetMapping
-    public ResponseEntity<List<ContaDto>> findAll(){
-        List <ContaDto> list = service.findAll();
+    public ResponseEntity<List<ContaRequest>> findAll(){
+        List <ContaRequest> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ContaDto> findByid(@PathVariable String id){
-        ContaDto dto = service.findById(id);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<ContaRequest> findByid(@PathVariable String id){
+        ContaRequest request = service.findById(id);
+        return ResponseEntity.ok().body(request);
     }
     @PutMapping (value = "/{id}")
-    public ResponseEntity<ContaDto> insert (@PathVariable String id, @RequestBody ContaDto dto) {
-        dto = service.update(id, dto);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<ContaRequest> update(@PathVariable String id, @RequestBody ContaRequest request) {
+        request = service.update(id, request);
+        return ResponseEntity.ok().body(request);
     }
 
     @DeleteMapping (value = "/{id}")
-    public ResponseEntity<ContaDto> delete (@PathVariable String id) {
+    public ResponseEntity<ContaRequest> delete (@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping (value = "/contas/{id}/depositar")
+    public ResponseEntity<ContaRequest> deposito(@PathVariable String id, @RequestBody ContaRequest dto){
+        dto = service.deposito(id, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
 }

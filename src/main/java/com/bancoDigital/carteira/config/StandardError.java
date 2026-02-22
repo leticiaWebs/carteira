@@ -1,4 +1,4 @@
-package com.bancoDigital.carteira.service.exceptions;
+package com.bancoDigital.carteira.config;
 
 import lombok.Getter;
 import lombok.Setter;
