@@ -3,7 +3,7 @@ package com.bancoDigital.carteira.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +24,7 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Cliente(Cliente cliente) {
+
+    public Cliente(@Valid Cliente cliente) {
     }
 }

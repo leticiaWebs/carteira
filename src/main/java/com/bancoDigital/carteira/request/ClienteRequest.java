@@ -1,6 +1,7 @@
 package com.bancoDigital.carteira.request;
 
 import com.bancoDigital.carteira.domain.Cliente;
+import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -32,4 +33,5 @@ public class ClienteRequest implements Serializable {
         this.documento = documento;
         this.nome = nome;
     }
+
 }

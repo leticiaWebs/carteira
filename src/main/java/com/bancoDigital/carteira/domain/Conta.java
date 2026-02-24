@@ -1,5 +1,6 @@
 package com.bancoDigital.carteira.domain;
 
+import com.bancoDigital.carteira.request.ClienteRequest;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

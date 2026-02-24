@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ContaRequest implements Serializable {
-
     private int id;
 
     private String numeroConta;
