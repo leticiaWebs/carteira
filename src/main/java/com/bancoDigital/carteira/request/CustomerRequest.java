@@ -15,10 +15,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CustomerRequest implements Serializable {
 
-    @NotBlank(message = "Nome é obrigatório")
+    @NotBlank(message = "Documento é obrigatório")
     private String document;
 
-    @NotBlank(message = "Documento é obrigatório")
+    @NotBlank(message = "Nome é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 números")
     private String name;
 

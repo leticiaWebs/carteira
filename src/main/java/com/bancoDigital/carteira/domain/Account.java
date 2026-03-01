@@ -3,6 +3,7 @@ package com.bancoDigital.carteira.domain;
 import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Account {
     private int id;
     private String accountNumber;
     private String agencyNumber;
+    @DecimalMax(value = "0.0", inclusive = true)
     private BigDecimal balance;
     private LocalDateTime createdAt;
 
