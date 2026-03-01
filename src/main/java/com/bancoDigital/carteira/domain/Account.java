@@ -1,6 +1,6 @@
 package com.bancoDigital.carteira.domain;
 
-import com.bancoDigital.carteira.request.ClienteRequest;
+import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,24 +17,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbAccount")
-public class Conta {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String numeroConta;
-    private String numeroAgencia;
-    private double saldo;
-    private LocalDateTime dataCriacao;
+    private String accountNumber;
+    private String agencyNumber;
+    private BigDecimal balance;
+    private LocalDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "tbCliente")
     @Valid
-    private Cliente cliente;
+    private Customer customer;
 
     @PrePersist
     public void prePersist() {
-        this.dataCriacao = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

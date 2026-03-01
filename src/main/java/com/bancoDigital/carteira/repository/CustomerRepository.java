@@ -1,9 +1,9 @@
 package com.bancoDigital.carteira.repository;
 
-import com.bancoDigital.carteira.domain.Cliente;
+import com.bancoDigital.carteira.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, String> {
+public interface CustomerRepository extends JpaRepository<Customer, String> {
 }

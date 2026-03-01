@@ -1,32 +1,12 @@
 package com.bancoDigital.carteira.service;
 
-import com.bancoDigital.carteira.domain.Cliente;
-import com.bancoDigital.carteira.domain.Conta;
-import com.bancoDigital.carteira.request.ContaRequest;
-import com.bancoDigital.carteira.repository.ClienteRepository;
-import com.bancoDigital.carteira.repository.ContaRepository;
-import com.bancoDigital.carteira.exception.DatabaseException;
-import com.bancoDigital.carteira.exception.ResourceNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ContaServiceTest {
+public class AccountServiceTest {
 //
 //    @InjectMocks
 //    private ContaService service;

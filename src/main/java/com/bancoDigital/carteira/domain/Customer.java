@@ -3,28 +3,21 @@ package com.bancoDigital.carteira.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "tbCliente")
-public class Cliente {
+public class Customer {
 
     @Id
-    private String documento;
-    private String nome;
+    private String document;
+    private String name;
 
-    public Cliente(String documento, String nome) {
-        this.documento = documento;
-        this.nome = nome;
-    }
-
-
-    public Cliente(@Valid Cliente cliente) {
-    }
 }
