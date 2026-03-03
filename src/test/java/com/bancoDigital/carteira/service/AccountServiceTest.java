@@ -1,131 +1,166 @@
 package com.bancoDigital.carteira.service;
 
+import com.bancoDigital.carteira.domain.Account;
+import com.bancoDigital.carteira.domain.Customer;
+import com.bancoDigital.carteira.exception.DatabaseException;
+import com.bancoDigital.carteira.exception.ResourceNotFoundException;
+import com.bancoDigital.carteira.repository.AccountRepository;
+import com.bancoDigital.carteira.repository.CustomerRepository;
+import com.bancoDigital.carteira.request.AccountRequest;
+import com.bancoDigital.carteira.request.DepositRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceTest {
-//
-//    @InjectMocks
-//    private ContaService service;
-//
-//    @Mock
-//    private ContaRepository contaRepository;
-//
-//    @Mock
-//    private ClienteRepository clienteRepository;
-//
-//    private Conta conta;
-//    private Cliente cliente;
-//    private ContaRequest dto;
-//
-//    @BeforeEach
-//    void setup() {
-//        cliente = new Cliente();
-//        cliente.setNome("Leticia");
-//        cliente.setDocumento("12345678901");
-//
-//        conta = new Conta();
-//        conta.setId(1);
-//        conta.setNumeroConta("123");
-//        conta.setNumeroAgencia("0001");
-//        conta.setSaldo("0");
-//        conta.setDataCriacao(LocalDateTime.now());
-//        conta.setCliente(cliente);
-//
-//        dto = new ContaRequest(conta);
-//    }
-//
-//
-//    @Test
-//    void createShouldReturnContaDtoWhenSuccess() {
-//        when(clienteRepository.save(any())).thenReturn(cliente);
-//        when(contaRepository.save(any())).thenReturn(conta);
-//
-//        ContaRequest result = service.create(dto);
-//
-//        assertNotNull(result);
-//        verify(clienteRepository, times(1)).save(any());
-//        verify(contaRepository, times(1)).save(any());
-//    }
-//
-//
-//    @Test
-//    void findAllShouldReturnList() {
-//        when(contaRepository.findAll()).thenReturn(List.of(conta));
-//
-//        List<ContaRequest> result = service.findAll();
-//
-//        assertEquals(1, result.size());
-//        verify(contaRepository, times(1)).findAll();
-//    }
-//
-//
-//    @Test
-//    void findByIdShouldReturnContaDtoWhenExists() {
-//        when(contaRepository.findById("1")).thenReturn(Optional.of(conta));
-//
-//        ContaRequest result = service.findById("1");
-//
-//        assertNotNull(result);
-//        verify(contaRepository).findById("1");
-//    }
-//
-//    @Test
-//    void findByIdShouldThrowWhenNotExists() {
-//        when(contaRepository.findById("1")).thenReturn(Optional.empty());
-//
-//        assertThrows(ResourceNotFoundException.class, () -> service.findById("1"));
-//    }
-//
-//
-//    @Test
-//    void updateShouldReturnContaDtoWhenSuccess() {
-//        when(contaRepository.getReferenceById("1")).thenReturn(conta);
-//        when(contaRepository.save(any())).thenReturn(conta);
-//
-//        ContaRequest result = service.update("1", dto);
-//
-//        assertNotNull(result);
-//        verify(contaRepository).getReferenceById("1");
-//        verify(contaRepository).save(any());
-//    }
-//
-//    @Test
-//    void updateShouldThrowWhenIdNotFound() {
-//        when(contaRepository.getReferenceById("1"))
-//                .thenThrow(EntityNotFoundException.class);
-//        assertThrows(ResourceNotFoundException.class,
-//                () -> service.update("1", dto));
-//    }
-//
-//
-//    @Test
-//    void deleteShouldDoNothingWhenSuccess() {
-//        doNothing().when(contaRepository).deleteById("1");
-//
-//        service.delete("1");
-//
-//        verify(contaRepository).deleteById("1");
-//    }
-//
-//    @Test
-//    void deleteShouldThrowResourceNotFound() {
-//        doThrow(EmptyResultDataAccessException.class)
-//                .when(contaRepository).deleteById("1");
-//
-//        assertThrows(ResourceNotFoundException.class,
-//                () -> service.delete("1"));
-//    }
-//
-//    @Test
-//    void deleteShouldThrowDatabaseException() {
-//        doThrow(DataIntegrityViolationException.class)
-//                .when(contaRepository).deleteById("1");
-//
-//        assertThrows(DatabaseException.class,
-//                () -> service.delete("1"));
-//    }
+class AccountServiceTest {
+
+    @InjectMocks
+    private AccountService service;
+
+    @Mock
+    private AccountRepository accountRepository;
+
+    @Mock
+    private CustomerRepository customerRepository;
+
+    private AccountRequest accountRequest;
+    private Customer customer;
+
+    @BeforeEach
+    void setUp() {
+        customer = new Customer();
+        customer.setName("João Silva");
+        customer.setDocument("12345678900");
+
+        accountRequest = new AccountRequest(
+                1,
+                "12345-6",
+                "0001",
+                BigDecimal.ZERO,
+                LocalDateTime.now(),
+                customer
+        );
+    }
+
+    @Test
+    void shouldCreateAccountSuccessfully() {
+
+        when(customerRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+        when(accountRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        AccountRequest result = service.create(accountRequest);
+
+        assertNotNull(result);
+        assertEquals("12345-6", result.getAccountNumber());
+        assertEquals(BigDecimal.ZERO, result.getBalance());
+
+        verify(customerRepository).save(any(Customer.class));
+        verify(accountRepository).save(any(Account.class));
+    }
+
+    @Test
+    void shouldReturnAccounts() {
+        Account account = new Account();
+        account.setId(1);
+
+        when(accountRepository.findAll()).thenReturn(List.of(account));
+
+        List<AccountRequest> result = service.findAll();
+
+        assertEquals(1, result.size());
+        verify(accountRepository).findAll();
+    }
+
+    @Test
+    void shouldReturnAccountWhenExists() {
+        Account account = new Account();
+        account.setId(1);
+
+        when(accountRepository.findById("1")).thenReturn(Optional.of(account));
+
+        AccountRequest result = service.findById("1");
+
+        assertNotNull(result);
+        assertEquals(1, result.getId());
+    }
+
+    @Test
+    void shouldThrowWhenAccountNotFound() {
+        when(accountRepository.findById("1")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> service.findById("1"));
+    }
+
+
+    @Test
+    void shouldUpdateAccount() {
+        Account entity = new Account();
+        entity.setId(1);
+        entity.setBalance(BigDecimal.TEN);
+
+        AccountRequest request = new AccountRequest();
+        request.setBalance(BigDecimal.valueOf(200));
+
+        when(accountRepository.getReferenceById("1")).thenReturn(entity);
+        when(accountRepository.save(any(Account.class))).thenReturn(entity);
+
+        AccountRequest result = service.update("1", request);
+
+        assertEquals(BigDecimal.valueOf(200), result.getBalance());
+    }
+
+
+    @Test
+    void shouldThrowWhenDeleteNotFound() {
+        doThrow(EmptyResultDataAccessException.class)
+                .when(accountRepository).deleteById("1");
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.delete("1"));
+    }
+
+    @Test
+    void shouldThrowDatabaseExceptionOnDelete() {
+        doThrow(DataIntegrityViolationException.class)
+                .when(accountRepository).deleteById("1");
+
+        assertThrows(DatabaseException.class,
+                () -> service.delete("1"));
+    }
+
+
+    @Test
+    void shouldAddBalance() {
+        Account entity = new Account();
+        entity.setId(1);
+        entity.setBalance(BigDecimal.valueOf(100));
+
+        DepositRequest deposit = new DepositRequest();
+        deposit.setDeposit(BigDecimal.valueOf(50));
+
+        when(accountRepository.getReferenceById("1")).thenReturn(entity);
+        when(accountRepository.save(any(Account.class))).thenReturn(entity);
+
+        AccountRequest result = service.addBalance("1", deposit);
+
+        assertEquals(BigDecimal.valueOf(150), result.getBalance());
+    }
 }
+
+
+
