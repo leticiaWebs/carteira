@@ -166,6 +166,7 @@ public class AccountControllerTest {
 
         ResponseEntity<AccountRequest> response = controller.addBalance(String.valueOf(1), depositRequest);
 
+
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

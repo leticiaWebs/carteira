@@ -2,6 +2,7 @@ package com.bancoDigital.carteira.controller;
 
 import com.bancoDigital.carteira.request.AccountRequest;
 import com.bancoDigital.carteira.request.DepositRequest;
+import com.bancoDigital.carteira.request.WithdrawRequest;
 import com.bancoDigital.carteira.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,14 @@ public class AccountController {
             @RequestBody @Valid DepositRequest depositRequest) {
         return ResponseEntity.ok(service.addBalance(id, depositRequest));
     }
+
+    @PutMapping("/{id}/sacar")
+    public ResponseEntity<AccountRequest> withdrawOperation(
+            @PathVariable String id,
+            @RequestBody @Valid WithdrawRequest withdrawRequest) {
+        return ResponseEntity.ok(service.withdrawOperation(id, withdrawRequest));
+    }
+
 
 }
 

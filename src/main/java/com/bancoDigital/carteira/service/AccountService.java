@@ -9,6 +9,7 @@ import com.bancoDigital.carteira.exception.DadosInvalidosException;
 import com.bancoDigital.carteira.exception.DatabaseException;
 import com.bancoDigital.carteira.exception.ResourceNotFoundException;
 import com.bancoDigital.carteira.request.DepositRequest;
+import com.bancoDigital.carteira.request.WithdrawRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,22 @@ public class AccountService {
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Conta não encontrada: " + id);
         }
+
+
+    }
+    @Transactional
+    public AccountRequest withdrawOperation(String id, WithdrawRequest withdrawRequest) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            BigDecimal withdraw = entity.getBalance().subtract(withdrawRequest.getWithdraw());
+            entity.setBalance(withdraw);
+            entity = accountRepository.save(entity);
+            return new AccountRequest(entity);
+
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Conta não encontrada: " + id);
+        }
+
     }
 }
 
