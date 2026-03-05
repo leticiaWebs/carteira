@@ -25,7 +25,6 @@ public class Account {
     private int id;
     private String accountNumber;
     private String agencyNumber;
-    @DecimalMax(value = "0.0", inclusive = true)
     @Column(name = "balance")
     private BigDecimal balance;
     private LocalDateTime createdAt;

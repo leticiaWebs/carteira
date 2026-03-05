@@ -4,7 +4,6 @@ import com.bancoDigital.carteira.domain.Account;
 import com.bancoDigital.carteira.domain.Customer;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

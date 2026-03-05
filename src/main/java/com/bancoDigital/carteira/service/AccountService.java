@@ -10,6 +10,7 @@ import com.bancoDigital.carteira.exception.DatabaseException;
 import com.bancoDigital.carteira.exception.ResourceNotFoundException;
 import com.bancoDigital.carteira.request.DepositRequest;
 import com.bancoDigital.carteira.request.WithdrawRequest;
+import com.bancoDigital.carteira.utils.AccountValidations;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +118,8 @@ public class AccountService {
     public AccountRequest withdrawOperation(String id, WithdrawRequest withdrawRequest) {
         try {
             Account entity = accountRepository.getReferenceById(id);
+            AccountValidations.verifyPositiveValues(withdrawRequest.getWithdraw());
+            AccountValidations.validateSufficientBalance(entity.getBalance(), withdrawRequest.getWithdraw());
             BigDecimal withdraw = entity.getBalance().subtract(withdrawRequest.getWithdraw());
             entity.setBalance(withdraw);
             entity = accountRepository.save(entity);
