@@ -1,6 +1,7 @@
 package com.bancoDigital.carteira.controller;
 
 import com.bancoDigital.carteira.request.AccountRequest;
+import com.bancoDigital.carteira.request.AccountResponse;
 import com.bancoDigital.carteira.request.DepositRequest;
 import com.bancoDigital.carteira.request.WithdrawRequest;
 import com.bancoDigital.carteira.service.AccountService;
@@ -65,6 +66,11 @@ public class AccountController {
         return ResponseEntity.ok(service.withdrawOperation(id, withdrawRequest));
     }
 
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<AccountResponse> getBalance(@PathVariable String id) {
+        AccountResponse result = service.getBalance(id);
+        return ResponseEntity.ok(result);
+    }
 
 }
 

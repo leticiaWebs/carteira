@@ -8,6 +8,7 @@ import com.bancoDigital.carteira.repository.AccountRepository;
 import com.bancoDigital.carteira.exception.DadosInvalidosException;
 import com.bancoDigital.carteira.exception.DatabaseException;
 import com.bancoDigital.carteira.exception.ResourceNotFoundException;
+import com.bancoDigital.carteira.request.AccountResponse;
 import com.bancoDigital.carteira.request.DepositRequest;
 import com.bancoDigital.carteira.request.WithdrawRequest;
 import com.bancoDigital.carteira.utils.AccountValidations;
@@ -33,6 +34,8 @@ public class AccountService {
     private CustomerRepository customerRepository;
 
     private DepositRequest depositRequest;
+
+    private AccountResponse accountResponse;
 
     @Transactional
     public AccountRequest create(AccountRequest request) {
@@ -114,6 +117,7 @@ public class AccountService {
 
 
     }
+
     @Transactional
     public AccountRequest withdrawOperation(String id, WithdrawRequest withdrawRequest) {
         try {
@@ -129,6 +133,16 @@ public class AccountService {
             throw new ResourceNotFoundException("Conta não encontrada: " + id);
         }
 
+    }
+
+    @Transactional
+    public AccountResponse getBalance(String id) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            return new AccountResponse(entity.getBalance());
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Conta não encontrada: " + id);
+        }
     }
 }
 

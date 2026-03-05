@@ -174,5 +174,17 @@ public class AccountControllerTest {
         verify(service, times(1)).addBalance(String.valueOf(eq(1)), any(DepositRequest.class));
     }
 
+//    @Test
+//    public void testSubtractBalance_Success() {
+//        AccountRequest contaComSaldo = new AccountRequest();
+//        contaComSaldo.setId(1);
+//        contaComSaldo.setAccountNumber("123456");
+//        contaComSaldo.setAgencyNumber("0001");
+//        contaComSaldo.setBalance(new BigDecimal("1500.00"));
+//
+//        when(service.withdrawOperation(String.valueOf(eq("150"))).thenReturn(contaComSaldo);
+//
+//    }
+
 
 }
