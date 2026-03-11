@@ -1,0 +1,272 @@
+
+openapi: 3.0.3
+info:
+  title: Banco Digital API
+  version: 1.0.0
+  description: API para gerenciamento de contas
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /conta:
+    post:
+      summary: Criar conta
+      description: Cria uma nova conta bancária
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Conta criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    get:
+      summary: Listar contas
+      description: Retorna todas as contas cadastradas
+      operationId: findAllAccounts
+      responses:
+        '200':
+          description: Lista de contas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+  /conta/{id}:
+
+    get:
+      summary: Buscar conta por ID
+      description: Retorna uma conta específica pelo ID
+      operationId: findAccountById
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+            example: "1"
+
+      responses:
+        '200':
+          description: Conta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+        '404':
+          description: Conta não encontrada
+
+
+    put:
+      summary: Atualizar conta
+      description: Atualiza os dados de uma conta existente
+      operationId: updateAccount
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+
+      responses:
+        '200':
+          description: Conta atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+
+    delete:
+      summary: Deletar conta
+      description: Remove uma conta do sistema
+      operationId: deleteAccount
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: Conta deletada com sucesso
+
+
+  /conta/{id}/deposito:
+
+    put:
+      summary: Depositar dinheiro
+      description: Realiza um depósito na conta
+      operationId: depositMoney
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+
+      responses:
+        '200':
+          description: Depósito realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+
+  /conta/{id}/sacar:
+
+    put:
+      summary: Sacar dinheiro
+      description: Realiza um saque da conta
+      operationId: withdrawMoney
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Withdraw'
+
+      responses:
+        '200':
+          description: Saque realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+
+  /conta/{id}/balance:
+
+    get:
+      summary: Consultar saldo
+      description: Retorna o saldo atual da conta
+      operationId: getAccountBalance
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Saldo da conta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+components:
+  schemas:
+    Account:
+      type: object
+      description: Representa uma conta bancária no sistema
+      required:
+        - id
+        - accountNumber
+        - agencyNumber
+        - balance
+        - createdAt
+
+      properties:
+
+        id:
+          type: integer
+          format: int64
+          description: Identificador único da conta
+          example: 1
+
+        accountNumber:
+          type: string
+          description: Número da conta bancária
+          example: "123456"
+
+        agencyNumber:
+          type: string
+          description: Número da agência bancária
+          example: "0001"
+
+        balance:
+          type: number
+          format: double
+          description: Saldo atual da conta
+          example: 1500.75
+
+        createdAt:
+          type: string
+          format: date-time
+          description: Data e hora de criação da conta
+          example: "2026-03-10T19:45:00"
+    Customer:
+      type: object
+      description: Representa um cliente do banco
+      properties:
+        document:
+          type: string
+          description: Identificador único do cliente
+          example: ""
+        name:
+          type: string
+          description: Nome completo do cliente
+          example: "Maria Silva"
+    Deposit:
+      type: object
+      description: Valor do deposito
+      properties:
+        deposit:
+          type: number
+          format: double
+          description: Representa a entidade de valor do deposito
+          example: 1500.75
+    Withdraw:
+      type: object
+      description: Representa a entidade de valor do saque
+      properties:
+        deposit:
+          type: number
+          format: double
+          description: Valor de saque
+          example: 1500.75
