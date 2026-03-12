@@ -12,6 +12,7 @@ import com.bancoDigital.carteira.utils.AccountValidations;
 import com.seuproject.model.AccountRequest;
 import com.seuproject.model.AccountResponse;
 import com.seuproject.model.Deposit;
+import com.seuproject.model.Withdraw;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -71,43 +72,68 @@ public class AccountService {
         return accountMapper.toResponse(entity);
     }
 
-   @Transactional
-   public AccountResponse update(String id, AccountRequest request){
-        try{
+    @Transactional
+    public AccountResponse update(String id, AccountRequest request) {
+        try {
             Account entity = accountRepository.getReferenceById(id);
             entity.setAccountNumber(request.getAccountNumber());
             entity.setAgencyNumber(request.getAgencyNumber());
             return accountMapper.toResponse(accountRepository.save(entity));
 
-        }catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Account not found: " + id);
         }
-   }
+    }
 
     @Transactional
     public void delete(String id) {
         try {
             accountRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException  e){
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("Account not found" + id);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Integrity violation");
         }
     }
 
     @Transactional
-    public AccountResponse addBalance(String id, Deposit depositRequest){
+    public AccountResponse addBalance(String id, Deposit depositRequest) {
         try {
             Account entity = accountRepository.getReferenceById(id);
             entity.setBalance(entity.getBalance().add(depositRequest.getAmount()));
             return accountMapper.toResponse(accountRepository.save(entity));
 
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Conta não encontrada: " + id);
+            throw new ResourceNotFoundException("Account not found: " + id);
         }
     }
 
+    @Transactional
+    public AccountResponse withdrawOperation(String id, Withdraw withdraw) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            AccountValidations.verifyPositiveValues(withdraw.getAmount());
+            AccountValidations.validateSufficientBalance(entity.getBalance(), withdraw.getAmount());
 
+            entity.setBalance(entity.getBalance().subtract(withdraw.getAmount()));
+
+            return accountMapper.toResponse(accountRepository.save(entity));
+
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Account not found: " + id);
+        }
+    }
+
+    @Transactional
+    public AccountResponse getBalance(String id) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            return accountMapper.toResponse(entity);
+
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Account not found: " + id);
+        }
+    }
 
 }
 
