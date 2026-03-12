@@ -234,7 +234,7 @@ components:
       properties:
         amount:
           type: number
-          format: double
+          format: BigDecimal
           example: 1500.75
 
     Withdraw:
@@ -244,5 +244,5 @@ components:
       properties:
         amount:
           type: number
-          format: double
+          format: BigDecimal
           example: 500.00
