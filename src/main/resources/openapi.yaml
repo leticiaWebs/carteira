@@ -184,6 +184,7 @@ components:
       required:
         - accountNumber
         - agencyNumber
+        - customer
       properties:
         accountNumber:
           type: string
@@ -191,7 +192,8 @@ components:
         agencyNumber:
           type: string
           example: "0001"
-
+        customer:          # ← dentro do properties, com letra minúscula
+          $ref: '#/components/schemas/Customer'
     AccountResponse:
       type: object
       description: Dados de retorno de uma conta bancária
@@ -240,7 +242,7 @@ components:
       required:
         - amount
       properties:
-        amount:          # ✅ corrigido de "deposit" para "amount"
+        amount:
           type: number
           format: double
           example: 500.00
