@@ -1,26 +1,26 @@
-//package com.bancoDigital.carteira.controller;
-//
-//import com.bancoDigital.carteira.request.AccountRequest;
-//import com.bancoDigital.carteira.request.DepositRequest;
-//import com.bancoDigital.carteira.service.AccountService;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//
-//import java.math.BigDecimal;
-//import java.util.Arrays;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.eq;
-//import static org.mockito.Mockito.*;
-//
+package com.bancoDigital.carteira.controller;
+
+import com.bancoDigital.carteira.service.AccountService;
+import com.seuproject.model.AccountRequest;
+import com.seuproject.model.Deposit;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
 //@DisplayName("Testes do AccountController")
 //public class AccountControllerTest {
 //
@@ -31,7 +31,7 @@
 //    private AccountController controller;
 //
 //    private AccountRequest accountRequest;
-//    private DepositRequest depositRequest;
+//    private Deposit depositRequest;
 //
 //    @BeforeEach
 //    public void setUp() {
@@ -43,7 +43,7 @@
 //        accountRequest.setAgencyNumber("0001");
 //        accountRequest.setBalance(new BigDecimal("1000.00"));
 //
-//        depositRequest = new DepositRequest();
+//        depositRequest = new Deposit();
 //        depositRequest.setDeposit(new BigDecimal("500.00"));
 //    }
 //
@@ -107,7 +107,7 @@
 //        assertEquals(1, response.getBody().getId());
 //        verify(service, times(1)).findById(String.valueOf(1));
 //    }
-//
+
 //    @Test
 //    public void testFindById_NotFound() {
 //        when(service.findById(String.valueOf(999))).thenReturn(null);
@@ -173,9 +173,8 @@
 //        assertEquals(new BigDecimal("1500.00"), response.getBody().getBalance());
 //        verify(service, times(1)).addBalance(String.valueOf(eq(1)), any(DepositRequest.class));
 //    }
+
 //
-////
-//
-//
-//
-//}
+
+
+
