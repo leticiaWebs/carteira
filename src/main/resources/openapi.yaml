@@ -192,7 +192,7 @@ components:
         agencyNumber:
           type: string
           example: "0001"
-        customer:          # ← dentro do properties, com letra minúscula
+        customer:
           $ref: '#/components/schemas/Customer'
     AccountResponse:
       type: object
@@ -246,3 +246,32 @@ components:
           type: number
           format: BigDecimal
           example: 500.00
+
+    BankStatementRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador único do lançamento
+          example: "1"
+        operationType:
+          type: string
+          description: Tipo da operação realizada
+          example: "DEPOSITO"
+        value:
+          type: number
+          format: BigDecimal
+          description: Valor da operação
+          example: 150.00
+        dateTime:
+          type: string
+          format: date-time
+          description: Data e hora da operação
+          example: "2024-01-15T10:30:00"
+        operationDescription:
+          type: string
+          description: Descrição detalhada da operação
+          example: "Depósito via PIX"
+        account:
+          $ref: '#/components/schemas/AccountResponse'
+          description: Conta associada ao lançamento
