@@ -19,7 +19,7 @@ public class BankStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String operationType;
     private BigDecimal value;
     private LocalDateTime dateTime;
