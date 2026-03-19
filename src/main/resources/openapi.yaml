@@ -175,7 +175,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
-
+  /conta/{id}/extrato:
+    get:
+      tags:
+        - conta
+      summary: Get account statement
+      operationId: getAccountStatement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Account statement retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankStatementRepresentation'
 components:
   schemas:
     AccountRequest:
@@ -258,7 +290,7 @@ components:
           type: string
           description: Tipo da operação realizada
           example: "DEPOSITO"
-        value:
+        amount:
           type: number
           format: BigDecimal
           description: Valor da operação

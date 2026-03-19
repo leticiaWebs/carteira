@@ -3,7 +3,6 @@ package com.bancoDigital.carteira.mapper;
 import com.bancoDigital.carteira.domain.BankStatement;
 import com.seuproject.model.BankStatementRepresentation;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

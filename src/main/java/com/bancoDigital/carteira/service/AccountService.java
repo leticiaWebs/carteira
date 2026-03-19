@@ -101,34 +101,6 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountResponse addBalance(String id, Deposit depositRequest) {
-        try {
-            Account entity = accountRepository.getReferenceById(id);
-            entity.setBalance(entity.getBalance().add(depositRequest.getAmount()));
-            return accountMapper.toResponse(accountRepository.save(entity));
-
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Account not found: " + id);
-        }
-    }
-
-    @Transactional
-    public AccountResponse withdrawOperation(String id, Withdraw withdraw) {
-        try {
-            Account entity = accountRepository.getReferenceById(id);
-            AccountValidations.verifyPositiveValues(withdraw.getAmount());
-            AccountValidations.validateSufficientBalance(entity.getBalance(), withdraw.getAmount());
-
-            entity.setBalance(entity.getBalance().subtract(withdraw.getAmount()));
-
-            return accountMapper.toResponse(accountRepository.save(entity));
-
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Account not found: " + id);
-        }
-    }
-
-    @Transactional
     public AccountResponse getBalance(String id) {
         try {
             Account entity = accountRepository.getReferenceById(id);
@@ -139,7 +111,7 @@ public class AccountService {
         }
     }
 
-    public AccountResponse deposit(String accountId, Deposit deposit) {
+    public AccountResponse addBalance(String accountId, Deposit deposit) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -153,7 +125,7 @@ public class AccountService {
         return accountMapper.toResponse(account);
     }
 
-    public AccountResponse withdraw(String accountId, Withdraw withdraw) {
+    public AccountResponse withdrawOperation(String accountId, Withdraw withdraw) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -171,7 +143,7 @@ public class AccountService {
     private void saveBankStatement(String type, BigDecimal value, String description, Account account) {
         BankStatement statement = new BankStatement();
         statement.setOperationType(type);
-        statement.setValue(value);
+        statement.setAmount(value);
         statement.setDateTime(OffsetDateTime.now());
         statement.setOperationDescription(description);
         statement.setAccount(account);

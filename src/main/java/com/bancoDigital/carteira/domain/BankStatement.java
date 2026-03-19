@@ -22,7 +22,7 @@ public class BankStatement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String operationType;
-    private BigDecimal value;
+    private BigDecimal amount;
     private OffsetDateTime dateTime;
     private String operationDescription;
 
