@@ -30,9 +30,9 @@ import java.util.List;
 public class AccountService {
 
     @Autowired
-    private AccountRepository accountRepository;
-    private CustomerRepository customerRepository;
-    private AccountMapper accountMapper;
+    private final AccountRepository accountRepository;
+    private final CustomerRepository customerRepository;
+    private final AccountMapper accountMapper;
 
     @Transactional
     public AccountResponse create(AccountRequest request) {

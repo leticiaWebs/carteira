@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController implements ContaApi {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Override
     public ResponseEntity<AccountResponse> createAccount(AccountRequest request) {

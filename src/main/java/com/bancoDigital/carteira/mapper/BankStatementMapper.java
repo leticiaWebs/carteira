@@ -10,14 +10,15 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BankStatementMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "account", ignore = true)
-
-    BankStatement toDomain(BankStatementRepresentation representation);
-
-    BankStatementRepresentation toRepresentation(BankStatement bankStatement);
-
-    List<BankStatementRepresentation> toRepresentationList(List<BankStatement> bankStatements);
+//    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "account", ignore = true)
+//
+//
+//    BankStatement toDomain(BankStatementRepresentation representation);
+//
+//    BankStatementRepresentation toRepresentation(BankStatement bankStatement);
+//
+//    List<BankStatementRepresentation> toRepresentationList(List<BankStatement> bankStatements);
 
 
 }
