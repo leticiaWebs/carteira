@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,10 +20,10 @@ public class BankStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String operationType;
     private BigDecimal value;
-    private LocalDateTime dateTime;
+    private OffsetDateTime dateTime;
     private String operationDescription;
 
     @ManyToOne

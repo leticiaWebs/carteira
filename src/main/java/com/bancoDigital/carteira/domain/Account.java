@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -27,16 +28,12 @@ public class Account {
     private String agencyNumber;
     @Column(name = "balance")
     private BigDecimal balance;
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "tbCliente")
     @Valid
     private Customer customer;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 
 }

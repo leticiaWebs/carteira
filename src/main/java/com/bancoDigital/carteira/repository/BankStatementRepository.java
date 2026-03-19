@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface BankStatementRepository extends JpaRepository<BankStatement, String> {
-    List<BankStatement> findAccountById(String id);
+    List<BankStatement> findAccountById(Long id);
 }
