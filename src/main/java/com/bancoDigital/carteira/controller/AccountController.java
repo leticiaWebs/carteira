@@ -25,6 +25,15 @@ public class AccountController implements ContaApi {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(accountService.create(request));
     }
+    @Override
+    public ResponseEntity<AccountResponse> depositMoney(String id, Deposit deposit) {
+        return ResponseEntity.ok(accountService.addBalance(id, deposit));
+    }
+
+    @Override
+    public ResponseEntity<AccountResponse> withdrawMoney(String id, Withdraw withdraw) {
+        return ResponseEntity.ok(accountService.withdrawOperation(id, withdraw));
+    }
 
     @Override
     public ResponseEntity<List<AccountResponse>> findAllAccounts() {
