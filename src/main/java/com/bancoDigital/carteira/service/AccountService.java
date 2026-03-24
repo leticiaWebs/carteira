@@ -10,7 +10,6 @@ import com.bancoDigital.carteira.mapper.AccountMapper;
 import com.bancoDigital.carteira.repository.AccountRepository;
 import com.bancoDigital.carteira.repository.BankStatementRepository;
 import com.bancoDigital.carteira.repository.CustomerRepository;
-import com.bancoDigital.carteira.utils.AccountValidations;
 import com.seuproject.model.AccountRequest;
 import com.seuproject.model.AccountResponse;
 import com.seuproject.model.Deposit;
@@ -18,13 +17,11 @@ import com.seuproject.model.Withdraw;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -32,11 +29,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService {
 
-    @Autowired
+
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
     private final AccountMapper accountMapper;
     private final BankStatementRepository bankStatementRepository;
+
 
     @Transactional
     public AccountResponse create(AccountRequest request) {
@@ -111,31 +109,28 @@ public class AccountService {
         }
     }
 
-    public AccountResponse addBalance(String accountId, Deposit deposit) {
-        Account account = accountRepository.findById(accountId)
+    @Transactional
+    public AccountResponse addBalance(String id, Deposit deposit) {
+        Account account = accountRepository.findById(String.valueOf(Integer.parseInt(id)))
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-
-        account.setBalance(account.getBalance().add(deposit.getAmount()));
+        account.deposit(deposit.getAmount());
         accountRepository.save(account);
-
 
         saveBankStatement("DEPOSIT", deposit.getAmount(), "Deposit has been made", account);
 
         return accountMapper.toResponse(account);
     }
 
+    @Transactional
     public AccountResponse withdrawOperation(String accountId, Withdraw withdraw) {
-        Account account = accountRepository.findById(accountId)
+        Account account = accountRepository.findById(String.valueOf(Integer.parseInt(accountId)))
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        if (account.getBalance().compareTo(withdraw.getAmount()) < 0)
-            throw new RuntimeException("Insufficient balance");
-
-        account.setBalance(account.getBalance().subtract(withdraw.getAmount()));
+        account.withdraw(withdraw.getAmount()); // chama a lógica da entidade
         accountRepository.save(account);
 
-        saveBankStatement("WITHDRAWAL", withdraw.getAmount(), "withdrawal", account);
+        saveBankStatement("WITHDRAWAL", withdraw.getAmount(), "Withdrawal", account);
 
         return accountMapper.toResponse(account);
     }

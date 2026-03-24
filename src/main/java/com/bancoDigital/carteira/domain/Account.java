@@ -1,16 +1,12 @@
 package com.bancoDigital.carteira.domain;
 
-import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMax;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -35,5 +31,19 @@ public class Account {
     @Valid
     private Customer customer;
 
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("Amount must be positive");
+        this.balance = this.balance.add(amount);
+    }
+
+
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("Amount must be positive");
+        if (this.balance.compareTo(amount) < 0)
+            throw new RuntimeException("Insufficient balance");
+        this.balance = this.balance.subtract(amount);
+    }
 
 }

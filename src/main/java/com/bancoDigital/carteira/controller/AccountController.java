@@ -1,5 +1,6 @@
 package com.bancoDigital.carteira.controller;
 
+import com.bancoDigital.carteira.domain.Account;
 import com.bancoDigital.carteira.service.AccountService;
 import com.seuproject.model.AccountRequest;
 import com.seuproject.model.AccountResponse;
@@ -42,19 +43,7 @@ public class AccountController implements ContaApi {
     }
 
     @Override
-    public ResponseEntity<AccountResponse> depositMoney(String id, Deposit deposit) {
-        return ResponseEntity.ok(accountService.addBalance(id, deposit));
-    }
-
-    @Override
-    public ResponseEntity<AccountResponse> withdrawMoney(String id, Withdraw withdraw) {
-        return ResponseEntity.ok(accountService.withdrawOperation(id, withdraw));
-    }
-
-    @Override
     public ResponseEntity<AccountResponse> getAccountBalance(String id) {
         return ResponseEntity.ok(accountService.getBalance(id));
     }
-
-
 }
