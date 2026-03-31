@@ -1,6 +1,5 @@
 package com.bancoDigital.carteira.controller;
 
-import com.bancoDigital.carteira.domain.Account;
 import com.bancoDigital.carteira.service.AccountService;
 import com.seuproject.model.AccountRequest;
 import com.seuproject.model.AccountResponse;
