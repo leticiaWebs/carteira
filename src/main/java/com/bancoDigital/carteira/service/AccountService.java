@@ -7,18 +7,19 @@ import com.bancoDigital.carteira.exception.DadosInvalidosException;
 import com.bancoDigital.carteira.exception.DatabaseException;
 import com.bancoDigital.carteira.exception.ResourceNotFoundException;
 import com.bancoDigital.carteira.mapper.AccountMapper;
+import com.bancoDigital.carteira.mapper.BankStatementMapper;
 import com.bancoDigital.carteira.repository.AccountRepository;
 import com.bancoDigital.carteira.repository.BankStatementRepository;
 import com.bancoDigital.carteira.repository.CustomerRepository;
-import com.seuproject.model.AccountRequest;
-import com.seuproject.model.AccountResponse;
-import com.seuproject.model.Deposit;
-import com.seuproject.model.Withdraw;
+import com.seuproject.model.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.h2.mvstore.Page;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public class AccountService {
     private final CustomerRepository customerRepository;
     private final AccountMapper accountMapper;
     private final BankStatementRepository bankStatementRepository;
+    private final BankStatementMapper bankStatementMapper;
 
 
     @Transactional
@@ -144,6 +146,20 @@ public class AccountService {
         statement.setAccount(account);
         bankStatementRepository.save(statement);
     }
+
+    @Transactional
+    public List<BankStatementRepresentation> getStatement(String accountId, Integer page, Integer size) {
+        var account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada: " + accountId));
+
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateTime"));
+
+        return bankStatementMapper.toRepresentationList(
+                bankStatementRepository.findAccountById((long) account.getId(), pageable).getContent());
+    }
+
 }
+
+
 
 

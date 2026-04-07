@@ -1,10 +1,7 @@
 package com.bancoDigital.carteira.controller;
 
 import com.bancoDigital.carteira.service.AccountService;
-import com.seuproject.model.AccountRequest;
-import com.seuproject.model.AccountResponse;
-import com.seuproject.model.Deposit;
-import com.seuproject.model.Withdraw;
+import com.seuproject.model.*;
 import com.seuprojeto.api.ContaApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,5 +50,11 @@ public class AccountController implements ContaApi {
     @Override
     public ResponseEntity<AccountResponse> getAccountBalance(String id) {
         return ResponseEntity.ok(accountService.getBalance(id));
+    }
+
+    @Override
+    public ResponseEntity<List<BankStatementRepresentation>> getAccountStatement(
+            String id, Integer page, Integer size) {
+        return ResponseEntity.ok(accountService.getStatement(id, page, size));
     }
 }
